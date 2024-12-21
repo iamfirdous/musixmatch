@@ -9,7 +9,7 @@ class OnboardPage extends StatefulWidget {
   State<OnboardPage> createState() => _OnboardPageState();
 }
 
-class _OnboardPageState extends State<OnboardPage> {
+class _OnboardPageState extends State<OnboardPage> with TickerProviderStateMixin {
   final controller = StoryController();
 
   @override
@@ -21,7 +21,6 @@ class _OnboardPageState extends State<OnboardPage> {
   @override
   Widget build(BuildContext context) {
     const duration = Duration(seconds: 6);
-    controller.play();
     Widget getView(int i) {
       return Container(
         width: double.infinity,
@@ -36,27 +35,19 @@ class _OnboardPageState extends State<OnboardPage> {
         child: Text('Hello $i'),
       );
     }
+
+    final storyItems = [
+      StoryItem(getView(0), duration: duration),
+      StoryItem(getView(1), duration: duration),
+      StoryItem(getView(2), duration: duration),
+      StoryItem(getView(3), duration: duration),
+    ];
     return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            spacing: 12.0,
-            children: [
-              // StoryProgressIndicator(value)
-            ],
-          ),
-          StoryView(
-            controller: controller,
-            inline: true,
-            storyItems: [
-              StoryItem(getView(0), duration: duration),
-              StoryItem(getView(1), duration: duration),
-              StoryItem(getView(2), duration: duration),
-              StoryItem(getView(3), duration: duration),
-            ],
-            onComplete: () => print('Helllllllloooo'),
-          ),
-        ],
+      body: StoryView(
+        controller: controller,
+        inline: true,
+        storyItems: storyItems,
+        onComplete: () => print('Helllllllloooo'),
       ),
     );
   }
